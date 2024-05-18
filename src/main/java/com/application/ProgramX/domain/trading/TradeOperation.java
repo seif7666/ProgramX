@@ -2,6 +2,7 @@ package com.application.ProgramX.domain.trading;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
 
@@ -12,12 +13,15 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder(toBuilder = true)
 public abstract class TradeOperation {
     protected static boolean SELL_OPERATION=true;
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String operationID;
     @Column(nullable = false)
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<TradedSupply> tradedSupplies;
+
+    public abstract boolean isSellingOperation();
 }

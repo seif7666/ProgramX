@@ -15,10 +15,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TradedSupply {
     @EmbeddedId
-    EmbeddedTradedSupply embeddedTradedSupply;
+    EmbeddedTradedSupply embeddedTradedSupply=new EmbeddedTradedSupply();
     Integer numberOfBags;
     Float quantity;
     Float totalPrice;
+
+    public void setOperation(TradeOperation operation){
+        this.embeddedTradedSupply.setOperation(operation);
+    }
+    public void setSupply(Supply supply){
+        this.embeddedTradedSupply.setSupply(supply);
+    }
 
     public void setNumberOfBags(Integer numberOfBags) {
         DomainHelper.checkNotLessThan0AndThrowErrorInCase("NumberOfBags",numberOfBags);
@@ -35,11 +42,16 @@ public class TradedSupply {
         this.totalPrice = totalPrice;
     }
 
+
     @Embeddable
-    static class EmbeddedTradedSupply{
-        @ManyToOne(fetch = FetchType.EAGER)
+    @Builder
+    @AllArgsConstructor
+    @Data
+    @NoArgsConstructor
+    public static class EmbeddedTradedSupply{
+        @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
         TradeOperation operation;
-        @OneToOne(fetch = FetchType.LAZY)
+        @ManyToOne(fetch = FetchType.LAZY)
         Supply supply;
     }
 }

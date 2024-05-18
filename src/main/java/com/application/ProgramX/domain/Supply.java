@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "SUPPLY")
@@ -18,12 +20,16 @@ public class Supply {
     private Long SupplyID;
     @Column(nullable = false,unique = true)
     private String SupplyName;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade=CascadeType.REMOVE)
     private SupplyCategory supplyCategory;
-    private Integer numberOfBags;
-    private Float quantity;
-    private Float pricePerBag;
-    private Float pricePerKilo;
+    @Column(nullable = false)
+    private Integer numberOfBags=0;
+    @Column(nullable = false)
+    private Float quantity=0.0f;
+    @Column(nullable = false)
+    private Float pricePerBag=0.0f;
+    @Column(nullable = false)
+    private Float pricePerKilo=0.0f;
 
     public void setNumberOfBags(Integer numberOfBags) {
         DomainHelper.checkNotLessThan0AndThrowErrorInCase("NumberOfBags",numberOfBags);
