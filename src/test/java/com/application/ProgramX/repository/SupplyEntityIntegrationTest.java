@@ -24,6 +24,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class SupplyEntityIntegrationTest {
     @Autowired
     private DAOPool daoPool;
+
+    @Test
+    public void checkThatGetNumberOfCategoriesWithNameWorksRight(){
+        List<SupplyCategoryEntity> categories= Helper.generateCategories();
+        SupplyCategoryEntity entity= categories.get(0);
+        entity.setCategoryName("Test");
+        this.daoPool.getCategoryRepository().save(entity);
+        assertThat(this.daoPool.getCategoryRepository().getNumberOfCategoriesWithName("Test")).isEqualTo(1);
+        this.daoPool.getCategoryRepository().deleteById(entity.getCategoryID());
+        assertThat(this.daoPool.getCategoryRepository().getNumberOfCategoriesWithName("Test")).isEqualTo(0);
+    }
     @Test
     public void testWeCanGetAllRequiredSuppliesFromCertainCategory(){
 
