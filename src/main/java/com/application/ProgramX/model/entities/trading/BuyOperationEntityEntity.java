@@ -1,15 +1,13 @@
-package com.application.ProgramX.domain.trading;
+package com.application.ProgramX.model.entities.trading;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.SuperBuilder;
 
 @Entity
 @Data
 @DiscriminatorValue("BUY")
-public class BuyOperation  extends TradeOperation{
+public class BuyOperationEntityEntity extends TradeOperationEntity {
 
     @Override
     public boolean isSellingOperation() {

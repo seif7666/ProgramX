@@ -1,12 +1,10 @@
 package com.application.ProgramX.repository;
 
-import com.application.ProgramX.domain.Supply;
-import com.application.ProgramX.domain.SupplyCategory;
-import com.application.ProgramX.domain.trading.BuyOperation;
-import com.application.ProgramX.domain.trading.SellOperation;
-import com.application.ProgramX.domain.trading.TradeOperation;
-import com.application.ProgramX.domain.trading.TradedSupply;
-import org.junit.jupiter.api.BeforeAll;
+import com.application.ProgramX.model.entities.SupplyEntity;
+import com.application.ProgramX.model.entities.SupplyCategoryEntity;
+import com.application.ProgramX.model.repository.DAOPool;
+import com.application.ProgramX.model.entities.trading.BuyOperationEntityEntity;
+import com.application.ProgramX.model.entities.trading.TradedSupplyEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,30 +20,30 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class TradeOperationTest {
+public class TradeOperationEntityTest {
 
     @Autowired
     private DAOPool daoPool;
 
-    private List<Supply> supplies;
+    private List<SupplyEntity> supplies;
 
     @BeforeEach
     public void createSuppliesAndCategories(){
-        List<SupplyCategory> categories= Helper.generateCategories();
+        List<SupplyCategoryEntity> categories= Helper.generateCategories();
         daoPool.getCategoryRepository().saveAll(categories);
         supplies= Helper.createSupplies(categories);
         daoPool.getSupplyRepository().saveAll(supplies);
     }
     @Test
     public void checkThatNumbersAreCorrect(){
-        BuyOperation operation=new BuyOperation();
-        TradedSupply ts= new TradedSupply();
+        BuyOperationEntityEntity operation=new BuyOperationEntityEntity();
+        TradedSupplyEntity ts= new TradedSupplyEntity();
         ts.setSupply(supplies.get(0));
         ts.setOperation(operation);
         ts.setQuantity(15.0f);
         daoPool.getTradeOperationRepository().save(operation);
         daoPool.getTradedSupplyRepository().save(ts);
-        TradedSupply s=daoPool.getTradedSupplyRepository().findById(new TradedSupply.EmbeddedTradedSupply(operation,supplies.get(0))).get();
+        TradedSupplyEntity s=daoPool.getTradedSupplyRepository().findById(new TradedSupplyEntity.EmbeddedTradedSupply(operation,supplies.get(0))).get();
         System.out.println(s.getEmbeddedTradedSupply().getOperation().isSellingOperation());
 
     }

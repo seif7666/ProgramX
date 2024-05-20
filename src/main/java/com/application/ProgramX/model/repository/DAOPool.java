@@ -1,4 +1,4 @@
-package com.application.ProgramX.repository;
+package com.application.ProgramX.model.repository;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.application.ProgramX.domain;
+package com.application.ProgramX.model.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "CATEGORY")
@@ -15,12 +14,12 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SupplyCategory {
+public class SupplyCategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long CategoryID;
     @Column(nullable = false, unique = true)
     String CategoryName;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "supplyCategory", cascade = CascadeType.ALL)
-    List<Supply> supplies;
+    List<SupplyEntity> supplies;
 }

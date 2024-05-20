@@ -1,29 +1,27 @@
 package com.application.ProgramX.repository;
 
-import com.application.ProgramX.domain.Supply;
-import com.application.ProgramX.domain.SupplyCategory;
-import com.application.ProgramX.domain.trading.BuyOperation;
-import com.application.ProgramX.domain.trading.SellOperation;
-import com.application.ProgramX.domain.trading.TradeOperation;
-import com.application.ProgramX.domain.trading.TradedSupply;
+import com.application.ProgramX.model.entities.SupplyEntity;
+import com.application.ProgramX.model.entities.SupplyCategoryEntity;
+import com.application.ProgramX.model.entities.trading.SellOperationEntityEntity;
+import com.application.ProgramX.model.entities.trading.TradedSupplyEntity;
 
 import java.util.*;
 
 public class Helper {
 
-    public static List<SupplyCategory> generateCategories(){
-        LinkedList<SupplyCategory> list=new LinkedList<>();
+    public static List<SupplyCategoryEntity> generateCategories(){
+        LinkedList<SupplyCategoryEntity> list=new LinkedList<>();
         String[] names=new String[]{"Chicken Stuff","Cow Stuff","Soil Stuff"};
         for(String name : names)
-            list.add(SupplyCategory.builder().CategoryName(name).build());
+            list.add(SupplyCategoryEntity.builder().CategoryName(name).build());
         return list;
     }
 
-    public static List<Supply> createSupplies(Iterable<SupplyCategory> categories){
-        Iterator<SupplyCategory> iterator= categories.iterator();
-        SupplyCategory category= iterator.next();
-        List<Supply>supplies= new LinkedList<>();
-        supplies.add(Supply.builder()
+    public static List<SupplyEntity> createSupplies(Iterable<SupplyCategoryEntity> categories){
+        Iterator<SupplyCategoryEntity> iterator= categories.iterator();
+        SupplyCategoryEntity category= iterator.next();
+        List<SupplyEntity>supplies= new LinkedList<>();
+        supplies.add(SupplyEntity.builder()
                         .SupplyName("ChickenFood")
                 .supplyCategory(category)
                 .numberOfBags(10)
@@ -32,7 +30,7 @@ public class Helper {
                 .pricePerBag(1500.00f)
                 .pricePerKilo(15.89f)
                 .build());
-        supplies.add(Supply.builder()
+        supplies.add(SupplyEntity.builder()
                 .SupplyName("ChickenMedicine")
                 .supplyCategory(category)
                 .numberOfBags(2)
@@ -47,18 +45,18 @@ public class Helper {
     }
 
 
-    public static List<SellOperation> createSellOperations(List<Supply> supplies) {
-        List<SellOperation> operations = new LinkedList<>();
-        Set<TradedSupply> tradedSupplies = new HashSet<>();
-        SellOperation op = new SellOperation();
-        tradedSupplies.add(TradedSupply.builder()
-                .embeddedTradedSupply(TradedSupply.EmbeddedTradedSupply.builder().supply(supplies.get(0)).operation(op).build())
+    public static List<SellOperationEntityEntity> createSellOperations(List<SupplyEntity> supplies) {
+        List<SellOperationEntityEntity> operations = new LinkedList<>();
+        Set<TradedSupplyEntity> tradedSupplies = new HashSet<>();
+        SellOperationEntityEntity op = new SellOperationEntityEntity();
+        tradedSupplies.add(TradedSupplyEntity.builder()
+                .embeddedTradedSupply(TradedSupplyEntity.EmbeddedTradedSupply.builder().supplyEntity(supplies.get(0)).operation(op).build())
                 .numberOfBags(2)
                 .totalPrice(150.00f)
                 .build()
         );
-        tradedSupplies.add(TradedSupply.builder()
-                .embeddedTradedSupply(TradedSupply.EmbeddedTradedSupply.builder().supply(supplies.get(1)).operation(op).build())
+        tradedSupplies.add(TradedSupplyEntity.builder()
+                .embeddedTradedSupply(TradedSupplyEntity.EmbeddedTradedSupply.builder().supplyEntity(supplies.get(1)).operation(op).build())
                 .quantity(5.25f)
                 .totalPrice(150.00f)
                 .build()

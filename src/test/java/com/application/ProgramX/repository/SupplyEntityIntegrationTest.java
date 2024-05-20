@@ -1,7 +1,8 @@
 package com.application.ProgramX.repository;
 
-import com.application.ProgramX.domain.Supply;
-import com.application.ProgramX.domain.SupplyCategory;
+import com.application.ProgramX.model.entities.SupplyEntity;
+import com.application.ProgramX.model.entities.SupplyCategoryEntity;
+import com.application.ProgramX.model.repository.DAOPool;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,19 +21,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @Log
-public class SupplyIntegrationTest {
+public class SupplyEntityIntegrationTest {
     @Autowired
     private DAOPool daoPool;
     @Test
     public void testWeCanGetAllRequiredSuppliesFromCertainCategory(){
 
-        List<SupplyCategory> categories= Helper.generateCategories();
-        for(SupplyCategory category:categories) {
+        List<SupplyCategoryEntity> categories= Helper.generateCategories();
+        for(SupplyCategoryEntity category:categories) {
             daoPool.getCategoryRepository().save(category);
         }
         assertThat(daoPool.getCategoryRepository().count()).isEqualTo(3L);
-        List<Supply> supplies= Helper.createSupplies(categories);
-        for (Supply s : supplies)
+        List<SupplyEntity> supplies= Helper.createSupplies(categories);
+        for (SupplyEntity s : supplies)
             daoPool.getSupplyRepository().save(s);
         assertThat(daoPool.getCategoryRepository().findById(1l).get().getSupplies().size()).isEqualTo(2);
         assertThat(daoPool.getCategoryRepository().findById(2l).get().getSupplies().size()).isEqualTo(0);
@@ -40,7 +41,7 @@ public class SupplyIntegrationTest {
     }
     @Test
     public void checkThatUpdatingCategoryNameWillThrowConstraintError(){
-        List<SupplyCategory> categories= Helper.generateCategories();
+        List<SupplyCategoryEntity> categories= Helper.generateCategories();
         daoPool.getCategoryRepository().saveAll(categories);
         categories.get(2).setCategoryName(categories.get(0).getCategoryName());
         assertThrows(JpaSystemException.class,
@@ -51,9 +52,9 @@ public class SupplyIntegrationTest {
 
     @Test
     public void checkThatNewCategoryNameIsPropagatedToSupplies(){
-        List<SupplyCategory> categories= Helper.generateCategories();
+        List<SupplyCategoryEntity> categories= Helper.generateCategories();
         daoPool.getCategoryRepository().saveAll(categories);
-        List<Supply> supplies= Helper.createSupplies(categories);
+        List<SupplyEntity> supplies= Helper.createSupplies(categories);
         daoPool.getSupplyRepository().saveAll(supplies);
         categories.get(0).setCategoryName("NewName");
         daoPool.getCategoryRepository().save(categories.get(0));
@@ -62,13 +63,13 @@ public class SupplyIntegrationTest {
 
     @Test
     public void checkThatSuppliesAreDeletedByDeletingCategory(){
-        List<SupplyCategory> categories= Helper.generateCategories();
+        List<SupplyCategoryEntity> categories= Helper.generateCategories();
         daoPool.getCategoryRepository().saveAll(categories);
-        List<Supply> supplies= Helper.createSupplies(categories);
+        List<SupplyEntity> supplies= Helper.createSupplies(categories);
         daoPool.getSupplyRepository().saveAll(supplies);
         daoPool.getCategoryRepository().deleteById(categories.get(0).getCategoryID());
         assertThat(daoPool.getCategoryRepository().findById(categories.get(0).getCategoryID())).isNotPresent();
-        for(Supply s:daoPool.getSupplyRepository().findAll())
+        for(SupplyEntity s:daoPool.getSupplyRepository().findAll())
             log.info(s.toString());
         assertThat(daoPool.getSupplyRepository().count()).isEqualTo(0);
     }
