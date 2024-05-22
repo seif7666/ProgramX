@@ -26,6 +26,15 @@ public class SupplyEntityIntegrationTest {
     private DAOPool daoPool;
 
     @Test
+    public void checkThatAllSuppliesWithCertainCategoryIDWorks(){
+        List<SupplyCategoryEntity> categories= Helper.generateCategories();
+        this.daoPool.getCategoryRepository().saveAll(categories);
+        List<SupplyEntity>supplies= Helper.createSupplies(categories);
+        this.daoPool.getSupplyRepository().saveAll(supplies);
+        assertThat(Helper.getSize(this.daoPool.getSupplyRepository().getSuppliesByCategory(categories.get(0).getCategoryID()))).isEqualTo(2);
+        assertThat(Helper.getSize(this.daoPool.getSupplyRepository().getSuppliesByCategory(categories.get(1).getCategoryID()))).isEqualTo(1);
+    }
+    @Test
     public void checkThatGetNumberOfCategoriesWithNameWorksRight(){
         List<SupplyCategoryEntity> categories= Helper.generateCategories();
         SupplyCategoryEntity entity= categories.get(0);

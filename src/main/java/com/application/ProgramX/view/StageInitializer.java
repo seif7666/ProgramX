@@ -1,9 +1,7 @@
 package com.application.ProgramX.view;
 
 import com.application.ProgramX.ProgramXApp;
-import com.application.ProgramX.SpringApplication;
-import com.application.ProgramX.service.apis.ICategoryService;
-import com.application.ProgramX.service.apis.impl.CategoryService;
+import com.application.ProgramX.service.apis.ServicePool;
 import com.application.ProgramX.service.message.MessageRetriever;
 import com.application.ProgramX.view.controllers.CategoryController;
 import javafx.fxml.FXMLLoader;
@@ -13,11 +11,8 @@ import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 @Component
@@ -39,7 +34,7 @@ public class StageInitializer implements ApplicationListener<ProgramXApp.StageRe
             loader.setControllerFactory(c ->{
                 return new CategoryController(
                         applicationContext.getBean(MessageRetriever.class),
-                        applicationContext.getBean(ICategoryService.class)
+                        applicationContext.getBean(ServicePool.class)
                 );
             });
             VBox vbox=loader.<VBox>load();

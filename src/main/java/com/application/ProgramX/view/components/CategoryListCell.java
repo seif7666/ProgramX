@@ -147,11 +147,11 @@ public class CategoryListCell extends ListCell<SupplyCategoryDTO> {
         @Override
         protected void execute() {
             TextInputDialog x=new TextInputDialog("Enter anything here");
-            x.setHeaderText(retriever.getMessage().enterNewCategoryName());
+            x.setHeaderText(retriever.getMessage().getCategoryMessage().enterNewCategoryName());
             x.showAndWait();
             String text= x.getResult();
             if(text.isEmpty() || text.trim().isEmpty()){
-                new ErrorDialogue(retriever.getMessage().categoryNameMustNotBeEmpty());
+                new ErrorDialogue(retriever.getMessage().getCategoryMessage().categoryNameMustNotBeEmpty());
                 return;
             }
             this.category.setCategoryName(text);

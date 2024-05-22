@@ -1,22 +1,11 @@
 package com.application.ProgramX.service.message;
 
-public interface Message {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-    String categoryWithNameAlreadyExists(String name);
-
-    String sureToCreateCategory();
-
-    String sureToUpdateCategory();
-
-    String sureToDeleteCategory();
-
-    String categoryNameMustNotBeEmpty();
-
-    String categoryCreatedSuccessfully();
-
-    String categoryUpdatedSuccessfully();
-
-    String categoryDeleted();
-
-    String enterNewCategoryName();
+@Getter
+@AllArgsConstructor
+public abstract class Message {
+    private CategoryMessage categoryMessage;
+    private SupplyMessage supplyMessage;
 }

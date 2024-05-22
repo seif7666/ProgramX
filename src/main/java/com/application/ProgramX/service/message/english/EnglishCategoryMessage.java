@@ -1,6 +1,8 @@
-package com.application.ProgramX.service.message;
+package com.application.ProgramX.service.message.english;
 
-public class EnglishMessage implements Message{
+import com.application.ProgramX.service.message.CategoryMessage;
+
+public class EnglishCategoryMessage implements CategoryMessage {
     @Override
     public String categoryWithNameAlreadyExists(String name) {
         return String.format("Category with name %s already exists!",name);

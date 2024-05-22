@@ -14,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Consumer;
 
 @Service
 public class CategoryService implements ICategoryService {
@@ -33,10 +31,10 @@ public class CategoryService implements ICategoryService {
     public ServiceResponse create(SupplyCategoryDTO supplyCategory) {
         IDialogue dialogue;
         if (this.repository.getNumberOfCategoriesWithName(supplyCategory.getCategoryName()) != 0) {
-            dialogue = new ErrorDialogue(messageRetriever.getMessage().categoryWithNameAlreadyExists(supplyCategory.getCategoryName()));
+            dialogue = new ErrorDialogue(messageRetriever.getMessage().getCategoryMessage().categoryWithNameAlreadyExists(supplyCategory.getCategoryName()));
         } else {
             SupplyCategoryEntity categoryEntity = SupplyCategoryEntity.builder().CategoryName(supplyCategory.getCategoryName()).build();
-            dialogue = new DecisionDialogue(new CreateCategoryCommand(categoryEntity, this.repository,dtos), this.messageRetriever.getMessage().sureToCreateCategory(), this.messageRetriever.getMessage().categoryCreatedSuccessfully());
+            dialogue = new DecisionDialogue(new CreateCategoryCommand(categoryEntity, this.repository,dtos), this.messageRetriever.getMessage().getCategoryMessage().sureToCreateCategory(), this.messageRetriever.getMessage().getCategoryMessage().categoryCreatedSuccessfully());
         }
         return new ServiceResponse(dialogue);
     }
@@ -45,17 +43,17 @@ public class CategoryService implements ICategoryService {
     public ServiceResponse update(SupplyCategoryDTO supplyCategory) {
         IDialogue dialogue;
         if (this.repository.getNumberOfCategoriesWithName(supplyCategory.getCategoryName()) != 0) {
-            dialogue = new ErrorDialogue(messageRetriever.getMessage().categoryWithNameAlreadyExists(supplyCategory.getCategoryName()));
+            dialogue = new ErrorDialogue(messageRetriever.getMessage().getCategoryMessage().categoryWithNameAlreadyExists(supplyCategory.getCategoryName()));
         } else {
             SupplyCategoryEntity categoryEntity = SupplyCategoryEntity.builder().CategoryName(supplyCategory.getCategoryName()).CategoryID(supplyCategory.getCategoryID()).build();
-            dialogue = new DecisionDialogue(new CreateCategoryCommand(categoryEntity, this.repository, dtos), this.messageRetriever.getMessage().sureToUpdateCategory(), this.messageRetriever.getMessage().categoryUpdatedSuccessfully());
+            dialogue = new DecisionDialogue(new CreateCategoryCommand(categoryEntity, this.repository, dtos), this.messageRetriever.getMessage().getCategoryMessage().sureToUpdateCategory(), this.messageRetriever.getMessage().getCategoryMessage().categoryUpdatedSuccessfully());
         }
         return new ServiceResponse(dialogue);
     }
 
     @Override
     public ServiceResponse delete(SupplyCategoryDTO supplyCategoryDTO) {
-        IDialogue dialogue = new DecisionDialogue(new DeleteCategoryCommand(supplyCategoryDTO.getCategoryID(), repository,dtos), this.messageRetriever.getMessage().sureToDeleteCategory(),this.messageRetriever.getMessage().categoryDeleted());
+        IDialogue dialogue = new DecisionDialogue(new DeleteCategoryCommand(supplyCategoryDTO.getCategoryID(), repository,dtos), this.messageRetriever.getMessage().getCategoryMessage().sureToDeleteCategory(),this.messageRetriever.getMessage().getCategoryMessage().categoryDeleted());
         return new ServiceResponse(dialogue);
     }
 
@@ -66,12 +64,7 @@ public class CategoryService implements ICategoryService {
             return dtos.values().stream().toList();
         Iterable<SupplyCategoryEntity> entities = repository.findAll();
         dtos = new HashMap<>();
-        entities.forEach(new Consumer<SupplyCategoryEntity>() {
-            @Override
-            public void accept(SupplyCategoryEntity supplyCategoryEntity) {
-                dtos.put(supplyCategoryEntity.getCategoryID(),SupplyCategoryDTO.builder().CategoryID(supplyCategoryEntity.getCategoryID()).CategoryName(supplyCategoryEntity.getCategoryName()).build());
-            }
-        });
+        entities.forEach(supplyCategoryEntity -> dtos.put(supplyCategoryEntity.getCategoryID(), SupplyCategoryDTO.builder().CategoryID(supplyCategoryEntity.getCategoryID()).CategoryName(supplyCategoryEntity.getCategoryName()).build()));
         return dtos.values().stream().toList();
     }
 
