@@ -38,4 +38,14 @@ public class EnglishSupplyMessage implements SupplyMessage {
     public String createdSuccessfully() {
         return "Supply created successfully!";
     }
+
+    @Override
+    public String someFieldsAreEmpty() {
+        return "Some Fields are empty!";
+    }
+
+    @Override
+    public String noCategoryWasSelected() {
+        return "No category was selected!";
+    }
 }

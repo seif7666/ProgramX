@@ -14,4 +14,8 @@ public interface SupplyMessage {
     String sureYouWantToDelete();
 
     String createdSuccessfully();
+
+    String someFieldsAreEmpty();
+
+    String noCategoryWasSelected();
 }

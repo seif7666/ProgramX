@@ -29,7 +29,7 @@ public class StageInitializer implements ApplicationListener<ProgramXApp.StageRe
         Stage stage = event.getStage();
         try {
             FXMLLoader loader = new FXMLLoader();
-            URL resource= getClass().getResource("/Categories.fxml");
+            URL resource= getClass().getResource("/FXMLs/Categories.fxml");
             loader.setLocation(resource);
             loader.setControllerFactory(c ->{
                 return new CategoryController(
@@ -46,4 +46,26 @@ public class StageInitializer implements ApplicationListener<ProgramXApp.StageRe
             exception.printStackTrace();
         }
     }
+
+    /*public static void switchScene(Stage stage){
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            URL resource= StageInitializer.class.getResource("/FXMLs/Categories.fxml");
+            loader.setLocation(resource);
+            loader.setControllerFactory(c ->{
+                return new CategoryController(
+                        applicationContext.getBean(MessageRetriever.class),
+                        applicationContext.getBean(ServicePool.class)
+                );
+            });
+            VBox vbox=loader.<VBox>load();
+            Scene scene = new Scene(vbox);
+            stage.setScene(scene);
+            stage.setFullScreen(true);
+            stage.show();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+    }*/
 }

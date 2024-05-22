@@ -16,4 +16,8 @@ public class SupplyCategoryDTO {
     long CategoryID;
     String CategoryName;
     List<SupplyDTO> supplies;
+
+    public String toString(){
+        return this.getCategoryName();
+    }
 }
