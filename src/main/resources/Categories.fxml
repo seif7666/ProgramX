@@ -45,7 +45,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.application.ProgramX.view.controllers.CategoryController">
+<VBox prefHeight="546.0" prefWidth="813.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.application.ProgramX.view.controllers.CategoryController">
   <children>
       <BorderPane prefHeight="73.0" prefWidth="640.0" style="-fx-background-color: #FFFFFF;">
          <right>
@@ -58,7 +58,7 @@
          <center>
             <HBox prefHeight="68.0" prefWidth="582.0" BorderPane.alignment="TOP_CENTER">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="97.0" style="-fx-background-color: FFFFFF; -fx-border-color: #FFFFFF;" styleClass="Nav-Button" text="Category" fx:id="CategoryButton">
+                  <Button fx:id="CategoryButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="97.0" style="-fx-background-color: FFFFFF; -fx-border-color: #FFFFFF;" styleClass="Nav-Button" text="Category">
                      <font>
                         <Font name="SansSerif Bold Italic" size="13.0" />
                      </font>
@@ -118,7 +118,7 @@
                         </Label>
                      </right>
                      <left>
-                        <TextField alignment="TOP_LEFT" promptText="Search..." BorderPane.alignment="CENTER" />
+                        <TextField fx:id="SearchTextField" alignment="TOP_LEFT" onKeyTyped="#applyFilter" promptText="Search..." BorderPane.alignment="CENTER" />
                      </left>
                      <opaqueInsets>
                         <Insets />
@@ -127,7 +127,7 @@
                         <Insets left="20.0" right="20.0" />
                      </padding>
                   </BorderPane>
-                  <ListView prefHeight="233.0" prefWidth="640.0" style="-fx-background-color: #FFFFFF;" fx:id="CategoriesListView"/>
+                  <ListView fx:id="CategoriesListView" prefHeight="397.0" prefWidth="813.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" />
                </children>
             </VBox>
          </children>

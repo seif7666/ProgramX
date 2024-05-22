@@ -12,7 +12,6 @@ public class ErrorDialogue implements IDialogue{
 
     @Override
     public void executeDialogue() {
-        //TODO
         Alert alert = new Alert(Alert.AlertType.ERROR, this.errorMessage);
         alert.showAndWait();
     }

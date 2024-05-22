@@ -6,20 +6,15 @@ import com.application.ProgramX.service.message.MessageRetriever;
 import com.application.ProgramX.service.responses.dialogs.ErrorDialogue;
 import com.application.ProgramX.view.components.CategoryListCell;
 import com.application.ProgramX.view.styles.ButtonStyles;
-import javafx.beans.Observable;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
-import javafx.util.Callback;
+import javafx.scene.input.KeyEvent;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Log
@@ -30,6 +25,8 @@ public class CategoryController implements Observer {
     public Button CategoryButton;
     @FXML
     public ListView<SupplyCategoryDTO> CategoriesListView;
+    @FXML
+    public TextField SearchTextField;
     private final MessageRetriever retriever;
     private final ICategoryService service;
 
@@ -83,5 +80,22 @@ public class CategoryController implements Observer {
     @Override
     public void update() {
         this.fillCategoryList();
+    }
+
+    public void applyFilter(KeyEvent inputMethodEvent) {
+        fillCategoryList();
+        String text= SearchTextField.getText();
+        System.out.println(text);
+        if(text.isEmpty() || text.trim().isEmpty()){
+            //Do Nothing
+        }
+        else{
+            List<SupplyCategoryDTO>dtos= new LinkedList<>();
+            for(SupplyCategoryDTO i : this.CategoriesListView.getItems())
+                    if(i.getCategoryName().toLowerCase().contains(text.toLowerCase()))
+                        dtos.add(i);
+            emptyList();
+            this.CategoriesListView.getItems().addAll(dtos);
+        }
     }
 }
