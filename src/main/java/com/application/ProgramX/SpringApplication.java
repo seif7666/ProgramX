@@ -1,12 +1,12 @@
 package com.application.ProgramX;
 
-import org.springframework.boot.SpringApplication;
+import javafx.application.Application;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Application {
+public class SpringApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		Application.launch(ProgramXApp.class,args);
 	}
 }
