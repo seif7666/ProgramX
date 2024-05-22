@@ -9,4 +9,12 @@ public interface Message {
     String sureToUpdateCategory();
 
     String sureToDeleteCategory();
+
+    String categoryNameMustNotBeEmpty();
+
+    String categoryCreatedSuccessfully();
+
+    String categoryUpdatedSuccessfully();
+
+    String categoryDeleted();
 }

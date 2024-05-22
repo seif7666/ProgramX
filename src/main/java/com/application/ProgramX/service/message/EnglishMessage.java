@@ -20,4 +20,24 @@ public class EnglishMessage implements Message{
     public String sureToDeleteCategory() {
         return "Are you sure you want to delete this category?";
     }
+
+    @Override
+    public String categoryUpdatedSuccessfully() {
+        return "Category was successfully updated!";
+    }
+
+    @Override
+    public String categoryDeleted() {
+        return "Category was deleted!";
+    }
+
+    @Override
+    public String categoryCreatedSuccessfully() {
+        return "New Category was successfully created!";
+    }
+
+    @Override
+    public String categoryNameMustNotBeEmpty() {
+        return "Category name is empty!";
+    }
 }

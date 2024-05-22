@@ -34,7 +34,7 @@ public class CategoryService implements ICategoryService {
             dialogue = new ErrorDialogue(messageRetriever.getMessage().categoryWithNameAlreadyExists(supplyCategory.getCategoryName()));
         } else {
             SupplyCategoryEntity categoryEntity = SupplyCategoryEntity.builder().CategoryName(supplyCategory.getCategoryName()).build();
-            dialogue = new DecisionDialogue(new CreateCategoryCommand(categoryEntity, this.repository), this.messageRetriever.getMessage().sureToCreateCategory());
+            dialogue = new DecisionDialogue(new CreateCategoryCommand(categoryEntity, this.repository), this.messageRetriever.getMessage().sureToCreateCategory(), this.messageRetriever.getMessage().categoryCreatedSuccessfully());
         }
         return new ServiceResponse(dialogue);
     }
@@ -46,14 +46,14 @@ public class CategoryService implements ICategoryService {
             dialogue = new ErrorDialogue(messageRetriever.getMessage().categoryWithNameAlreadyExists(supplyCategory.getCategoryName()));
         } else {
             SupplyCategoryEntity categoryEntity = SupplyCategoryEntity.builder().CategoryName(supplyCategory.getCategoryName()).build();
-            dialogue = new DecisionDialogue(new CreateCategoryCommand(categoryEntity, this.repository), this.messageRetriever.getMessage().sureToUpdateCategory());
+            dialogue = new DecisionDialogue(new CreateCategoryCommand(categoryEntity, this.repository), this.messageRetriever.getMessage().sureToUpdateCategory(), this.messageRetriever.getMessage().categoryUpdatedSuccessfully());
         }
         return new ServiceResponse(dialogue);
     }
 
     @Override
     public ServiceResponse delete(SupplyCategoryDTO supplyCategoryDTO) {
-        IDialogue dialogue = new DecisionDialogue(new DeleteCategoryCommand(supplyCategoryDTO.getCategoryID(), repository), this.messageRetriever.getMessage().sureToDeleteCategory());
+        IDialogue dialogue = new DecisionDialogue(new DeleteCategoryCommand(supplyCategoryDTO.getCategoryID(), repository), this.messageRetriever.getMessage().sureToDeleteCategory(),this.messageRetriever.getMessage().categoryDeleted());
         return new ServiceResponse(dialogue);
     }
 
