@@ -45,7 +45,7 @@ public class CategoryService implements ICategoryService {
         if (this.repository.getNumberOfCategoriesWithName(supplyCategory.getCategoryName()) != 0) {
             dialogue = new ErrorDialogue(messageRetriever.getMessage().categoryWithNameAlreadyExists(supplyCategory.getCategoryName()));
         } else {
-            SupplyCategoryEntity categoryEntity = SupplyCategoryEntity.builder().CategoryName(supplyCategory.getCategoryName()).build();
+            SupplyCategoryEntity categoryEntity = SupplyCategoryEntity.builder().CategoryName(supplyCategory.getCategoryName()).CategoryID(supplyCategory.getCategoryID()).build();
             dialogue = new DecisionDialogue(new CreateCategoryCommand(categoryEntity, this.repository), this.messageRetriever.getMessage().sureToUpdateCategory(), this.messageRetriever.getMessage().categoryUpdatedSuccessfully());
         }
         return new ServiceResponse(dialogue);

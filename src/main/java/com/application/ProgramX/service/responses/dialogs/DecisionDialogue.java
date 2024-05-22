@@ -30,7 +30,7 @@ public class DecisionDialogue implements IDialogue {
     }
 
     private void executeOnAcceptanceDialogue() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,this.acceptanceMessage);
         alert.showAndWait();
     }
 

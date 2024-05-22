@@ -27,6 +27,11 @@ public class EnglishMessage implements Message{
     }
 
     @Override
+    public String enterNewCategoryName() {
+        return "Enter new category name";
+    }
+
+    @Override
     public String categoryDeleted() {
         return "Category was deleted!";
     }

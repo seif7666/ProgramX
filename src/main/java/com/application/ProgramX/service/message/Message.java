@@ -17,4 +17,6 @@ public interface Message {
     String categoryUpdatedSuccessfully();
 
     String categoryDeleted();
+
+    String enterNewCategoryName();
 }
