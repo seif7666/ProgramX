@@ -11,20 +11,24 @@ import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import lombok.extern.java.Log;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @Log
-public class SupplyController {
-    private final ServicePool servicePool;
-    private final MessageRetriever messageRetriever;
-
+public class SupplyController extends Controller {
     @FXML
     public ListView<SupplyDTO> SuppliesListView;
     @FXML
@@ -43,8 +47,7 @@ public class SupplyController {
     public TextField PricePerKgField;
 
     public SupplyController(ServicePool servicePool, MessageRetriever retriever) {
-        this.messageRetriever= retriever;
-        this.servicePool= servicePool;
+        super(servicePool,retriever);
     }
 
     public void initialize(){
@@ -136,10 +139,10 @@ public class SupplyController {
         String[] values= new String[]{SupplyNameTextField.getText(),NumberOfBagsTextField.getText(),QuantityTextField.getText(),PricePerBagTextField.getText(),PricePerKgField.getText() };
         for(String val: values){
             if (val.isEmpty() || val.trim().isEmpty())
-                throw new RuntimeException(this.messageRetriever.getMessage().getSupplyMessage().someFieldsAreEmpty());
+                throw new RuntimeException(this.retriever.getMessage().getSupplyMessage().someFieldsAreEmpty());
         }
         if(this.CreateCategoryCombo.getValue()== null)
-            throw new RuntimeException(this.messageRetriever.getMessage().getSupplyMessage().noCategoryWasSelected()) ;
+            throw new RuntimeException(this.retriever.getMessage().getSupplyMessage().noCategoryWasSelected()) ;
     }
 
     private void adjustValidDouble(TextField observable, String oldValue, String newValue){
@@ -159,5 +162,9 @@ public class SupplyController {
         }catch (Exception e){
             observable.setText(oldValue);
         }
+    }
+
+    public void openCategoriesWindow(ActionEvent actionEvent) throws IOException {
+        super.switchWindow(CATEGORIES_FXML,new CategoryController(this.retriever, this.servicePool),actionEvent);
     }
 }

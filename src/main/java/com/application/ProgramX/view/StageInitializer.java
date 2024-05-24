@@ -4,6 +4,7 @@ import com.application.ProgramX.ProgramXApp;
 import com.application.ProgramX.service.apis.ServicePool;
 import com.application.ProgramX.service.message.MessageRetriever;
 import com.application.ProgramX.view.controllers.CategoryController;
+import com.application.ProgramX.view.controllers.Controller;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
@@ -29,7 +30,7 @@ public class StageInitializer implements ApplicationListener<ProgramXApp.StageRe
         Stage stage = event.getStage();
         try {
             FXMLLoader loader = new FXMLLoader();
-            URL resource= getClass().getResource("/FXMLs/Categories.fxml");
+            URL resource= getClass().getResource(Controller.CATEGORIES_FXML);
             loader.setLocation(resource);
             loader.setControllerFactory(c ->{
                 return new CategoryController(

@@ -59,7 +59,7 @@
             <center>
                 <HBox prefHeight="68.0" prefWidth="582.0" BorderPane.alignment="TOP_CENTER">
                     <children>
-                        <Button fx:id="CategoryButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="97.0" style="-fx-background-color: FFFFFF; -fx-border-color: #FFFFFF;" styleClass="Nav-Button" text="Category">
+                        <Button fx:id="CategoryButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="97.0" style="-fx-background-color: FFFFFF; -fx-border-color: #FFFFFF;" styleClass="Nav-Button" text="Category" onAction="#openCategoriesWindow">
                             <font>
                                 <Font name="SansSerif Bold Italic" size="13.0" />
                             </font>

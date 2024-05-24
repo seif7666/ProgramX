@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Log
-public class CategoryController implements Observer {
+public class CategoryController extends Controller implements Observer {
     @FXML
     public TextField NewCategoryTextField;
     @FXML
@@ -32,12 +32,9 @@ public class CategoryController implements Observer {
     public ListView<SupplyCategoryDTO> CategoriesListView;
     @FXML
     public TextField SearchTextField;
-    private final MessageRetriever retriever;
-    private final ServicePool servicePool;
 
     public CategoryController(MessageRetriever retriever, ServicePool service) {
-        this.retriever = retriever;
-        this.servicePool = service;
+        super(service,retriever);
     }
 
     public void initialize() {
@@ -105,14 +102,6 @@ public class CategoryController implements Observer {
     }
 
     public void openSuppliesPage(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Objects.requireNonNull(getClass().getResource("/FXMLs/Supplies.fxml")));
-        loader.setControllerFactory(c -> new SupplyController(this.servicePool, this.retriever));
-        VBox vbox= loader.<VBox>load();
-        Stage stage= (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene= new Scene(vbox);
-        stage.setScene(scene);
-        stage.setFullScreen(true);
-        stage.show();
+        super.switchWindow(Controller.SUPPLIES_FXML,new SupplyController(this.servicePool, this.retriever),actionEvent);
     }
 }
