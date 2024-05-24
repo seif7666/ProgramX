@@ -1,22 +1,34 @@
 package com.application.ProgramX.view.components;
 
+import com.application.ProgramX.service.apis.ServicePool;
 import com.application.ProgramX.service.dtos.SupplyDTO;
+import com.application.ProgramX.service.message.MessageRetriever;
+import com.application.ProgramX.view.controllers.Controller;
+import com.application.ProgramX.view.controllers.SupplyDetailsController;
 import com.application.ProgramX.view.styles.Constants;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+
+import java.io.IOException;
 
 public class SupplyListCell<T> extends ListCell<SupplyDTO> {
 
     private SupplyDTO supplyDTO;
+    private final ServicePool servicePool;
+    private final MessageRetriever retriever;
 
-    public SupplyListCell() {
+    public SupplyListCell(ServicePool servicePool, MessageRetriever retriever) {
+        this.servicePool = servicePool;
+        this.retriever = retriever;
     }
+
     public void updateItem(SupplyDTO pos, boolean empty) {
         super.updateItem(pos, empty);
         if (pos == null) {
@@ -48,6 +60,17 @@ public class SupplyListCell<T> extends ListCell<SupplyDTO> {
         leftHbox.getChildren().add(supplyNameLabel);
         leftHbox.setSpacing(30);
         pane.rightProperty().set(leftHbox);
+        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                //Add new Window.
+                try {
+                    Controller.switchWindow(Controller.SUPPLY_DETAILS_FXML,new SupplyDetailsController(servicePool,retriever,supplyDTO),mouseEvent);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
         setGraphic(pane);
     }
 

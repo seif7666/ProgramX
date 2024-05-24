@@ -6,26 +6,17 @@ import com.application.ProgramX.service.dtos.SupplyDTO;
 import com.application.ProgramX.service.message.MessageRetriever;
 import com.application.ProgramX.service.responses.dialogs.ErrorDialogue;
 import com.application.ProgramX.view.components.SupplyListCell;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Control;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import lombok.extern.java.Log;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 @Log
 public class SupplyController extends Controller {
@@ -59,22 +50,14 @@ public class SupplyController extends Controller {
         addValidations();
     }
     private void addValidations(){
-        NumberOfBagsTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            this.adjustValidInteger(NumberOfBagsTextField,oldValue,newValue);
-        });
-        QuantityTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            this.adjustValidDouble(QuantityTextField,oldValue,newValue);
-        });
-        PricePerBagTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            this.adjustValidDouble(PricePerBagTextField,oldValue,newValue);
-        });
-        PricePerKgField.textProperty().addListener((observable, oldValue, newValue) -> {
-            this.adjustValidDouble(PricePerKgField,oldValue,newValue);
-        });
+        super.addIntegerValidations(NumberOfBagsTextField);
+        super.addDoubleValidations(QuantityTextField);
+        super.addDoubleValidations(PricePerKgField);
+        super.addDoubleValidations(PricePerBagTextField);
     }
 
     private void setListStyle() {
-        this.SuppliesListView.setCellFactory(c->new SupplyListCell<SupplyDTO>());
+        this.SuppliesListView.setCellFactory(c->new SupplyListCell<SupplyDTO>(this.servicePool,this.retriever));
     }
 
 
@@ -145,26 +128,7 @@ public class SupplyController extends Controller {
             throw new RuntimeException(this.retriever.getMessage().getSupplyMessage().noCategoryWasSelected()) ;
     }
 
-    private void adjustValidDouble(TextField observable, String oldValue, String newValue){
-        try{
-            if(newValue.isEmpty())
-                return;
-            Double.parseDouble(newValue);
-        }catch (Exception e){
-            observable.setText(oldValue);
-        }
-    }
-    private void adjustValidInteger(TextField observable, String oldValue, String newValue){
-        try{
-            if(newValue.isEmpty())
-                return;
-            Integer.parseInt(newValue);
-        }catch (Exception e){
-            observable.setText(oldValue);
-        }
-    }
-
     public void openCategoriesWindow(ActionEvent actionEvent) throws IOException {
-        super.switchWindow(CATEGORIES_FXML,new CategoryController(this.retriever, this.servicePool),actionEvent);
+        switchWindow(CATEGORIES_FXML,new CategoryController(this.retriever, this.servicePool),actionEvent);
     }
 }

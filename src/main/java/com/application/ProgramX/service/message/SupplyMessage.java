@@ -18,4 +18,12 @@ public interface SupplyMessage {
     String someFieldsAreEmpty();
 
     String noCategoryWasSelected();
+
+    String nothingToUpdate();
+
+    String sureYouWantToOpenBag();
+
+    String newBagwasOpened();
+
+    String noBagsToOpen();
 }

@@ -44,7 +44,7 @@ public class SupplyService implements ISupplyService {
         }
         else{
             SupplyEntity entity = mapSupplyDTOToEntity(supply);
-            DecisionCommand command= new CreateSupplyCommand(entity,this.supplyRepository);
+            DecisionCommand command= new CreateSupplyCommand(entity,this.supplyRepository, this.suppliesDTOs);
             dialogue=new DecisionDialogue(command,this.messageRetriever.getMessage().getSupplyMessage().sureYouWantToCreateSupply(),this.messageRetriever.getMessage().getSupplyMessage().createdSuccessfully());
         }
         return new ServiceResponse(dialogue);
@@ -55,12 +55,12 @@ public class SupplyService implements ISupplyService {
     @Override
     public ServiceResponse update(SupplyDTO supply) {
         IDialogue dialogue;
-        if(!this.isSupplyNameUnique(supply.getSupplyName())){
+        if(!this.isSupplyNameUnique(supply.getSupplyName()) && !supply.getSupplyName().equals(suppliesDTOs.get(supply.getSupplyID()).getSupplyName())){
             dialogue= new ErrorDialogue(this.messageRetriever.getMessage().getSupplyMessage().supplyNameIsNotUnique(supply.getSupplyName()));
         }
         else{
             SupplyEntity entity = mapSupplyDTOToEntity(supply);
-            DecisionCommand command= new CreateSupplyCommand(entity,this.supplyRepository);
+            DecisionCommand command= new CreateSupplyCommand(entity,this.supplyRepository,this.suppliesDTOs);
             dialogue=new DecisionDialogue(command,this.messageRetriever.getMessage().getSupplyMessage().sureYouWantToUpdateSupply(),this.messageRetriever.getMessage().getSupplyMessage().updateSuccessful());
         }
         return new ServiceResponse(dialogue);
@@ -73,6 +73,7 @@ public class SupplyService implements ISupplyService {
             @Override
             public void executeOnAccept() {
                 supplyRepository.delete(entity);
+                suppliesDTOs.remove(entity.getSupplyID());
             }
             @Override
             public void executeOnDecline() {
@@ -113,6 +114,31 @@ public class SupplyService implements ISupplyService {
         return supplyDTOS;
     }
 
+    @Override
+    public ServiceResponse openBag(SupplyDTO supplyDTO) {
+        IDialogue dialogue;
+        if(supplyDTO.getNumberOfBags() == 0) //empty!
+            dialogue= new ErrorDialogue(this.messageRetriever.getMessage().getSupplyMessage().noBagsToOpen());
+        else{
+            DecisionCommand command= new DecisionCommand() {
+                @Override
+                public void executeOnAccept() {
+                    supplyDTO.setNumberOfBags(supplyDTO.getNumberOfBags()-1);
+                    supplyDTO.setQuantity(supplyDTO.getQuantity()+25);
+                    SupplyEntity entity= mapSupplyDTOToEntity(supplyDTO);
+                    supplyRepository.save(entity);
+                    suppliesDTOs.put(supplyDTO.getSupplyID(),supplyDTO);
+                }
+                @Override
+                public void executeOnDecline() {
+
+                }
+            };
+            dialogue=new DecisionDialogue(command,this.messageRetriever.getMessage().getSupplyMessage().sureYouWantToOpenBag(),this.messageRetriever.getMessage().getSupplyMessage().newBagwasOpened());
+        }
+        return new ServiceResponse(dialogue);
+    }
+
     private boolean isSupplyNameUnique(String supplyName){
         return this.supplyRepository.getNumberOfSuppliesHavingSameName(supplyName)==0;
     }
@@ -147,11 +173,14 @@ public class SupplyService implements ISupplyService {
     }
 
 
-    private record CreateSupplyCommand(SupplyEntity entity, SupplyRepository repository) implements DecisionCommand{
+    private record CreateSupplyCommand(SupplyEntity entity, SupplyRepository repository, HashMap<Long,SupplyDTO> dtos) implements DecisionCommand{
 
         @Override
         public void executeOnAccept() {
+
             this.repository.save(entity);
+            SupplyDTO dto= mapEntityToDTO(entity);
+            dtos.put(dto.getSupplyID(),dto);
         }
 
         @Override

@@ -48,4 +48,24 @@ public class EnglishSupplyMessage implements SupplyMessage {
     public String noCategoryWasSelected() {
         return "No category was selected!";
     }
+
+    @Override
+    public String nothingToUpdate() {
+        return "There was nothing to update";
+    }
+
+    @Override
+    public String sureYouWantToOpenBag() {
+        return "Are you sure you want to open a new bag and add 25Kg to quantity?";
+    }
+
+    @Override
+    public String newBagwasOpened() {
+        return "New bag was opened and 25Kg was added to quantity!";
+    }
+
+    @Override
+    public String noBagsToOpen() {
+        return "No bags found to open!";
+    }
 }

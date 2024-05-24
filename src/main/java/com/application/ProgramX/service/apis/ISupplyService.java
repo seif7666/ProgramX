@@ -26,4 +26,6 @@ public interface ISupplyService {
     List<SupplyDTO> getSupplies();
     List<SupplyCategoryDTO> getCategories();
     List<SupplyDTO> getSuppliesByCategory(SupplyCategoryDTO categoryDTO);
+
+    ServiceResponse openBag(SupplyDTO supplyDTO);
 }

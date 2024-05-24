@@ -20,13 +20,15 @@ public class DecisionDialogue implements IDialogue {
      * Run Dialogue and execute the command based on decision.
      */
     @Override
-    public void executeDialogue() {
+    public boolean executeDialogue() {
         boolean userAccepted = this.openDialogueAndGetUserMessage();
         if (userAccepted) {
             this.command.executeOnAccept();
             this.executeOnAcceptanceDialogue();
+            return true;
         } else
             this.command.executeOnDecline();
+        return false;
     }
 
     private void executeOnAcceptanceDialogue() {
