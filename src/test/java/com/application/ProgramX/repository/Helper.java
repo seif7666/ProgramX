@@ -40,6 +40,16 @@ public class Helper {
                 .pricePerKilo(90.89f)
                 .build());
 
+        supplies.add(SupplyEntity.builder()
+                .SupplyName("Leaves")
+                .supplyCategory(iterator.next())
+                .numberOfBags(2)
+                .pricePerBag(500.00f)
+                .quantity(2.00f)
+                .pricePerBag(7000.00f)
+                .pricePerKilo(90.89f)
+                .build());
+
         return supplies;
 
     }
@@ -122,5 +132,14 @@ public class Helper {
         op.setTradedSupplies(tradedSupplies);
         operations.add(op);*/
         return operations;
+    }
+
+    public static int getSize(Iterable<?> iterable){
+        int size=0;
+        for (Object o : iterable) {
+            size++;
+        }
+        return size;
+
     }
 }

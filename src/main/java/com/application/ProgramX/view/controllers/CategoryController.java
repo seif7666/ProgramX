@@ -1,6 +1,6 @@
 package com.application.ProgramX.view.controllers;
 
-import com.application.ProgramX.service.apis.ICategoryService;
+import com.application.ProgramX.service.apis.ServicePool;
 import com.application.ProgramX.service.dtos.SupplyCategoryDTO;
 import com.application.ProgramX.service.message.MessageRetriever;
 import com.application.ProgramX.service.responses.dialogs.ErrorDialogue;
@@ -8,17 +8,22 @@ import com.application.ProgramX.view.components.CategoryListCell;
 import com.application.ProgramX.view.styles.ButtonStyles;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import lombok.extern.java.Log;
-
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 @Log
-public class CategoryController implements Observer {
+public class CategoryController extends Controller implements Observer {
     @FXML
     public TextField NewCategoryTextField;
     @FXML
@@ -27,12 +32,9 @@ public class CategoryController implements Observer {
     public ListView<SupplyCategoryDTO> CategoriesListView;
     @FXML
     public TextField SearchTextField;
-    private final MessageRetriever retriever;
-    private final ICategoryService service;
 
-    public CategoryController(MessageRetriever retriever, ICategoryService service) {
-        this.retriever = retriever;
-        this.service = service;
+    public CategoryController(MessageRetriever retriever, ServicePool service) {
+        super(service,retriever);
     }
 
     public void initialize() {
@@ -48,25 +50,25 @@ public class CategoryController implements Observer {
 
     }
 
-    public void createCategory(ActionEvent actionEvent) {
+    public void createCategory() {
         String categoryName= this.NewCategoryTextField.getText();
         if(categoryName.isEmpty() || categoryName.trim().isEmpty()){
-            new ErrorDialogue(this.retriever.getMessage().categoryNameMustNotBeEmpty()).executeDialogue();
+            new ErrorDialogue(this.retriever.getMessage().getCategoryMessage().categoryNameMustNotBeEmpty()).executeDialogue();
             log.warning("Empty Message");
             return;
         }
         SupplyCategoryDTO dto= SupplyCategoryDTO.builder().CategoryName(categoryName).build();
-        service.create(dto).runDialogue();
+        servicePool.getCategoryService().create(dto).runDialogue();
         fillCategoryList();
     }
 
     private void setListStyle() {
-        this.CategoriesListView.setCellFactory(c->new CategoryListCell(service, retriever,this));
+        this.CategoriesListView.setCellFactory(c->new CategoryListCell(servicePool.getCategoryService(), retriever,this));
     }
 
     private void fillCategoryList(){
         emptyList();
-        List<SupplyCategoryDTO> categoryDTOList = this.service.getCategories();
+        List<SupplyCategoryDTO> categoryDTOList = this.servicePool.getCategoryService().getCategories();
         log.info(String.format("We have %d categories!",categoryDTOList.size()));
         this.CategoriesListView.getItems().addAll(categoryDTOList);
     }
@@ -82,7 +84,7 @@ public class CategoryController implements Observer {
         this.fillCategoryList();
     }
 
-    public void applyFilter(KeyEvent inputMethodEvent) {
+    public void applyFilter() {
         fillCategoryList();
         String text= SearchTextField.getText();
         System.out.println(text);
@@ -91,11 +93,15 @@ public class CategoryController implements Observer {
         }
         else{
             List<SupplyCategoryDTO>dtos= new LinkedList<>();
-            for(SupplyCategoryDTO i : this.CategoriesListView.getItems())
+            for(SupplyCategoryDTO i : this.servicePool.getCategoryService().getCategories())
                     if(i.getCategoryName().toLowerCase().contains(text.toLowerCase()))
                         dtos.add(i);
             emptyList();
             this.CategoriesListView.getItems().addAll(dtos);
         }
+    }
+
+    public void openSuppliesPage(ActionEvent actionEvent) throws IOException {
+        super.switchWindow(Controller.SUPPLIES_FXML,new SupplyController(this.servicePool, this.retriever),actionEvent);
     }
 }

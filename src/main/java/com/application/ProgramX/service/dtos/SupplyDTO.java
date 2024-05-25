@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class SupplyDTO {
-    private long supplyID;
+    private Long supplyID;
     private String supplyName;
     private SupplyCategoryDTO supplyCategory;
     private Integer numberOfBags=0;

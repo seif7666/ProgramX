@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.application.ProgramX.view.controllers.SupplyDetailsController"
+      prefHeight="400.0" prefWidth="600.0">
+
+    <Label fx:id="TitleLabel">
+    </Label>
+    <BorderPane>
+        <left>
+            <VBox spacing="100">
+                <HBox>
+                    <Label text="Name: "/>
+                    <TextField fx:id="SupplyNameTextField"/>
+                </HBox>
+                <HBox>
+                    <Label text="Category: "/>
+                    <ComboBox fx:id="CategoryTextField"/>
+                </HBox>
+                <HBox>
+                    <Label text="Number of bags: "/>
+                    <TextField fx:id="NumberOfBagsTextField"/>
+                </HBox>
+                <HBox>
+                    <Label text="Quantity: "/>
+                    <TextField fx:id="QuantityTextField"/>
+                </HBox>
+                <HBox>
+                    <Label text="PricePerBag: "/>
+                    <TextField fx:id="PricePerBagTextField"/>
+                </HBox>
+                <HBox>
+                    <Label text="PricePerKg: "/>
+                    <TextField fx:id="PricePerKgTextField"/>
+                </HBox>
+            </VBox>
+        </left>
+        <right>
+            <VBox spacing="100">
+                <Button text="Restore" onAction="#restore"/>
+                <Button text="Open a bag" onAction="#openBag"/>
+                <Button text="Update" onAction="#updateSupply"/>
+                <Button text="Delete" onAction="#deleteSupply"/>
+                <Button text="Back" onAction="#switchToSuppliesWindow"/>
+            </VBox>
+        </right>
+    </BorderPane>
+</VBox>

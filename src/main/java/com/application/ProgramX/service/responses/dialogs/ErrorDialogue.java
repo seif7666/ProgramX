@@ -11,8 +11,14 @@ public class ErrorDialogue implements IDialogue{
     }
 
     @Override
-    public void executeDialogue() {
+    public boolean executeDialogue() {
         Alert alert = new Alert(Alert.AlertType.ERROR, this.errorMessage);
         alert.showAndWait();
+        return false;
+    }
+
+    @Override
+    public void executeImmediate() {
+        executeDialogue();
     }
 }
