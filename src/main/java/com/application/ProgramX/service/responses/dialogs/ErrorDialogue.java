@@ -16,4 +16,9 @@ public class ErrorDialogue implements IDialogue{
         alert.showAndWait();
         return false;
     }
+
+    @Override
+    public void executeImmediate() {
+        executeDialogue();
+    }
 }

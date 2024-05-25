@@ -7,15 +7,18 @@ import com.application.ProgramX.service.message.MessageRetriever;
 import com.application.ProgramX.service.responses.dialogs.ErrorDialogue;
 import com.application.ProgramX.view.components.SupplyListCell;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.util.StringConverter;
 import lombok.extern.java.Log;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 @Log
@@ -36,6 +39,10 @@ public class SupplyController extends Controller {
     public TextField PricePerBagTextField;
     @FXML
     public TextField PricePerKgField;
+    @FXML
+    public TextField SearchTextField;
+
+    private List<SupplyDTO> currentGeneralList;
 
     public SupplyController(ServicePool servicePool, MessageRetriever retriever) {
         super(servicePool,retriever);
@@ -43,12 +50,32 @@ public class SupplyController extends Controller {
 
     public void initialize(){
         setListStyle();
-        updateList();
+        currentGeneralList=this.servicePool.getSupplyService().getSupplies();
+        updateList(currentGeneralList);
         List<SupplyCategoryDTO>dtos= this.servicePool.getSupplyService().getCategories();
         setByCategoryCombo(this.CreateCategoryCombo,dtos);
-        setByCategoryCombo(this.SearchByCategoryCombo,dtos);
+        manageFilterByCategory(dtos);
         addValidations();
     }
+
+    private void manageFilterByCategory(List<SupplyCategoryDTO>dtos) {
+        setByCategoryCombo(this.SearchByCategoryCombo,dtos);
+        this.SearchByCategoryCombo.getItems().addFirst(SupplyCategoryDTO.builder().CategoryName("").build());
+        this.SearchByCategoryCombo.setConverter(new StringConverter<SupplyCategoryDTO>() {
+            @Override
+            public String toString(SupplyCategoryDTO supplyCategoryDTO) {
+                return supplyCategoryDTO.getCategoryName().isEmpty()? "All":supplyCategoryDTO.getCategoryName();
+            }
+
+            @Override
+            public SupplyCategoryDTO fromString(String s) {
+                return null;
+            }
+        });
+        this.SearchByCategoryCombo.getSelectionModel().select(0);
+
+    }
+
     private void addValidations(){
         super.addIntegerValidations(NumberOfBagsTextField);
         super.addDoubleValidations(QuantityTextField);
@@ -61,9 +88,9 @@ public class SupplyController extends Controller {
     }
 
 
-    private void updateList() {
+    private void updateList(List<SupplyDTO> supplies) {
         emptyList();
-        fillList(this.servicePool.getSupplyService().getSupplies());
+        fillList(supplies);
     }
 
 
@@ -91,9 +118,10 @@ public class SupplyController extends Controller {
 
     }
     private void emptyList() {
-        List<SupplyDTO> supplies= this.SuppliesListView.getItems();
-        while(!supplies.isEmpty())
-            supplies.removeFirst();
+        log.info(this.SuppliesListView.getItems().size()+"");
+        while(!this.SuppliesListView.getItems().isEmpty())
+            this.SuppliesListView.getItems().removeFirst();
+        log.info(this.SuppliesListView.getItems().size()+"");
     }
 
 
@@ -112,7 +140,8 @@ public class SupplyController extends Controller {
                     .pricePerKilo(Float.parseFloat(PricePerKgField.getText()))
                     .build();
             this.servicePool.getSupplyService().create(supplyDTO).runDialogue();
-            this.updateList();
+            this.updateList(this.servicePool.getSupplyService().getSupplies());
+            this.SearchByCategoryCombo.getSelectionModel().select(0);
         }catch (Exception e){
             new ErrorDialogue(e.getMessage()).executeDialogue();
         }
@@ -130,5 +159,29 @@ public class SupplyController extends Controller {
 
     public void openCategoriesWindow(ActionEvent actionEvent) throws IOException {
         switchWindow(CATEGORIES_FXML,new CategoryController(this.retriever, this.servicePool),actionEvent);
+    }
+
+    public void filterByCategory(ActionEvent actionEvent) {
+        SupplyCategoryDTO dto= this.SearchByCategoryCombo.getValue();
+        List<SupplyDTO>supplies;
+        if(dto.getCategoryName().isEmpty())
+            supplies= servicePool.getSupplyService().getSupplies();
+        else
+            supplies=servicePool.getSupplyService().getSuppliesByCategory(dto);
+        currentGeneralList= supplies;
+        updateList(supplies);
+    }
+
+    public void applySearchFilter(KeyEvent keyEvent) {
+        String text= this.SearchTextField.getText().toLowerCase();
+        if(text.isEmpty()){
+            updateList(currentGeneralList);
+            return;
+        }
+        List<SupplyDTO> supplies=new LinkedList<>();
+        for(SupplyDTO dto : currentGeneralList)
+            if(dto.getSupplyName().toLowerCase().contains(text))
+                supplies.add(dto);
+        updateList(supplies);
     }
 }

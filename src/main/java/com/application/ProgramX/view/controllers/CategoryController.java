@@ -93,7 +93,7 @@ public class CategoryController extends Controller implements Observer {
         }
         else{
             List<SupplyCategoryDTO>dtos= new LinkedList<>();
-            for(SupplyCategoryDTO i : this.CategoriesListView.getItems())
+            for(SupplyCategoryDTO i : this.servicePool.getCategoryService().getCategories())
                     if(i.getCategoryName().toLowerCase().contains(text.toLowerCase()))
                         dtos.add(i);
             emptyList();

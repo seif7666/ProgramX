@@ -17,4 +17,9 @@ public class ServiceResponse {
     public void runDialogue(){
         this.executedSuccessfully=this.dialogue.executeDialogue();
     }
+
+    public void runImmediately(){
+        this.dialogue.executeImmediate();
+
+    }
 }

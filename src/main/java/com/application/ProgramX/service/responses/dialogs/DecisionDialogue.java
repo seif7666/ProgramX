@@ -46,4 +46,10 @@ public class DecisionDialogue implements IDialogue {
         alert.showAndWait();
         return alert.getResult() == ButtonType.YES;
     }
+
+
+    @Override
+    public void executeImmediate() {
+        this.command.executeOnAccept();
+    }
 }

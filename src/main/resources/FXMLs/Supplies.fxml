@@ -121,8 +121,8 @@
                             <left>
                         <HBox alignment="CENTER_LEFT" spacing="50.0" BorderPane.alignment="CENTER">
                            <children>
-                                      <TextField fx:id="SearchTextField" alignment="TOP_LEFT" promptText="Search..." />
-                              <ComboBox fx:id="SearchByCategoryCombo" prefHeight="24.0" prefWidth="192.0" promptText="SearchByCategory" />
+                                      <TextField fx:id="SearchTextField" alignment="TOP_LEFT" promptText="Search..." onKeyTyped="#applySearchFilter"/>
+                              <ComboBox fx:id="SearchByCategoryCombo" prefHeight="24.0" prefWidth="192.0" promptText="SearchByCategory" onAction="#filterByCategory"/>
                            </children>
                         </HBox>
                             </left>
