@@ -19,6 +19,8 @@ public class TradedSupplyDTO {
     Float quantity=0.0f;
     Float totalPrice=0.0f;
 
+    private boolean newBagOpened=false;
+
     public void setNumberOfBags(Integer numberOfBags) {
         LessThanZeroException.throwIfLessThan0("Number of bags",numberOfBags);
         this.numberOfBags = numberOfBags;

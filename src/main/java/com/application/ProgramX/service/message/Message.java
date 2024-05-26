@@ -8,4 +8,5 @@ import lombok.Getter;
 public abstract class Message {
     private CategoryMessage categoryMessage;
     private SupplyMessage supplyMessage;
+    private TradedSupplyMessage tradedSupplyMessage;
 }
