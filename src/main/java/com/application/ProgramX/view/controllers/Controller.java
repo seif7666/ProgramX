@@ -16,7 +16,7 @@ import java.util.Objects;
 
 public abstract class Controller {
     public static final String CATEGORIES_FXML="/FXMLs/Categories.fxml";
-    protected static final String SUPPLIES_FXML="/FXMLs/Supplies.fxml";
+    public static final String SUPPLIES_FXML="/FXMLs/Supplies.fxml";
     public static final String SUPPLY_DETAILS_FXML= "/FXMLs/SupplyDetails.fxml";
     protected final MessageRetriever retriever;
     protected final ServicePool servicePool;
@@ -27,7 +27,8 @@ public abstract class Controller {
     }
 
 
-    public static void switchWindow(String fxmlPath, Controller controller, Event actionEvent) throws IOException {
+    public static void switchWindow(String fxmlPath, Controller controller, Event actionEvent) {
+        try{
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Objects.requireNonNull(Controller.class.getResource(fxmlPath)));
         loader.setControllerFactory(c -> controller);
@@ -37,6 +38,9 @@ public abstract class Controller {
         stage.setScene(scene);
         stage.setFullScreen(true);
         stage.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     protected void addIntegerValidations(TextField field){

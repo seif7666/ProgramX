@@ -64,11 +64,7 @@ public class SupplyListCell<T> extends ListCell<SupplyDTO> {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 //Add new Window.
-                try {
-                    Controller.switchWindow(Controller.SUPPLY_DETAILS_FXML,new SupplyDetailsController(servicePool,retriever,supplyDTO),mouseEvent);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                Controller.switchWindow(Controller.SUPPLY_DETAILS_FXML,new SupplyDetailsController(servicePool,retriever,supplyDTO),mouseEvent);
             }
         });
         setGraphic(pane);

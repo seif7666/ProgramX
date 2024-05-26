@@ -63,7 +63,7 @@ public class CategoryController extends Controller implements Observer {
     }
 
     private void setListStyle() {
-        this.CategoriesListView.setCellFactory(c->new CategoryListCell(servicePool.getCategoryService(), retriever,this));
+        this.CategoriesListView.setCellFactory(c->new CategoryListCell(servicePool, retriever,this));
     }
 
     private void fillCategoryList(){

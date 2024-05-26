@@ -15,6 +15,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.util.StringConverter;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.java.Log;
 
 import java.io.IOException;
@@ -41,6 +43,8 @@ public class SupplyController extends Controller {
     public TextField PricePerKgField;
     @FXML
     public TextField SearchTextField;
+    @Setter
+    private SupplyCategoryDTO switchingCategory;
 
     private List<SupplyDTO> currentGeneralList;
 
@@ -56,6 +60,10 @@ public class SupplyController extends Controller {
         setByCategoryCombo(this.CreateCategoryCombo,dtos);
         manageFilterByCategory(dtos);
         addValidations();
+        if(this.switchingCategory!=null) {
+            this.filterByCategory(this.switchingCategory);
+            this.SearchByCategoryCombo.getSelectionModel().select(this.switchingCategory);
+        }
     }
 
     private void manageFilterByCategory(List<SupplyCategoryDTO>dtos) {
@@ -163,6 +171,10 @@ public class SupplyController extends Controller {
 
     public void filterByCategory(ActionEvent actionEvent) {
         SupplyCategoryDTO dto= this.SearchByCategoryCombo.getValue();
+        filterByCategory(dto);
+    }
+
+    private void filterByCategory(SupplyCategoryDTO dto) {
         List<SupplyDTO>supplies;
         if(dto.getCategoryName().isEmpty())
             supplies= servicePool.getSupplyService().getSupplies();

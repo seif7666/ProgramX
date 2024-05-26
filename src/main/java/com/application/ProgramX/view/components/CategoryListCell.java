@@ -1,10 +1,13 @@
 package com.application.ProgramX.view.components;
 
 import com.application.ProgramX.service.apis.ICategoryService;
+import com.application.ProgramX.service.apis.ServicePool;
 import com.application.ProgramX.service.dtos.SupplyCategoryDTO;
 import com.application.ProgramX.service.message.MessageRetriever;
 import com.application.ProgramX.service.responses.dialogs.ErrorDialogue;
+import com.application.ProgramX.view.controllers.Controller;
 import com.application.ProgramX.view.controllers.Observer;
+import com.application.ProgramX.view.controllers.SupplyController;
 import com.application.ProgramX.view.styles.Constants;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -25,12 +28,12 @@ import javafx.scene.text.Font;
 
 public class CategoryListCell extends ListCell<SupplyCategoryDTO> {
 
-    private final ICategoryService service;
+    private final ServicePool service;
 
     private SupplyCategoryDTO categoryDTO;
     private MessageRetriever retriever;
 
-    public CategoryListCell(ICategoryService service, MessageRetriever retriever, Observer observer) {
+    public CategoryListCell(ServicePool service, MessageRetriever retriever, Observer observer) {
         this.service = service;
         this.retriever = retriever;
         this.observer = observer;
@@ -60,6 +63,15 @@ public class CategoryListCell extends ListCell<SupplyCategoryDTO> {
         setHboxStyle(hbox);
         pane.leftProperty().set(hbox);
         setGraphic(pane);
+
+        setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                SupplyController controller= new SupplyController(service,retriever);
+                controller.setSwitchingCategory(categoryDTO);
+                Controller.switchWindow(Controller.SUPPLIES_FXML,controller,mouseEvent);
+            }
+        });
     }
 
     private void setHboxStyle(HBox hbox) {
@@ -133,7 +145,7 @@ public class CategoryListCell extends ListCell<SupplyCategoryDTO> {
         }
         @Override
         protected void execute(){
-            service.delete(categoryDTO).runDialogue();
+            service.getCategoryService().delete(categoryDTO).runDialogue();
         }
 
     }
@@ -155,7 +167,7 @@ public class CategoryListCell extends ListCell<SupplyCategoryDTO> {
                 return;
             }
             this.category.setCategoryName(text);
-            service.update(this.category).runDialogue();
+            service.getCategoryService().update(this.category).runDialogue();
         }
     }
 }

@@ -130,10 +130,6 @@ public class SupplyDetailsController extends Controller {
     }
 
     public void switchToSuppliesWindow(ActionEvent actionEvent)  {
-        try {
-            Controller.switchWindow(SUPPLIES_FXML,new SupplyController(this.servicePool,this.retriever),actionEvent);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+        Controller.switchWindow(SUPPLIES_FXML,new SupplyController(this.servicePool,this.retriever),actionEvent);
     }
 }
