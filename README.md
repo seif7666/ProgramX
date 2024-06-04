@@ -8,5 +8,5 @@
   * SQLite
   * JavaFX
   * Apache Maven
-
+## This project is not ready yet.
   
