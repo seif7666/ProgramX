@@ -10,9 +10,13 @@ import com.application.ProgramX.service.responses.dialogs.DecisionDialogue;
 import com.application.ProgramX.service.responses.dialogs.EmptyDialogue;
 import com.application.ProgramX.service.responses.dialogs.ErrorDialogue;
 import com.application.ProgramX.service.responses.dialogs.IDialogue;
+import lombok.extern.java.Log;
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
+@Log
 public class TradedSupplyService implements ITradedSupplyService {
     @Autowired
     private MessageRetriever retriever;
@@ -29,14 +33,14 @@ public class TradedSupplyService implements ITradedSupplyService {
             dialogue=new ErrorDialogue(retriever.getMessage().getTradedSupplyMessage().totalAmountIsNotValid());
         else {
             tradedSupplyDTO.setNumberOfBags(numberOfBags);
-            setSupplyBags(tradedSupplyDTO);
+            setSupplyBags(tradedSupplyDTO,supplyDTO.getNumberOfBags());
             dialogue=new EmptyDialogue();
         }
         return new ServiceResponse(dialogue);
     }
 
-    private void setSupplyBags(TradedSupplyDTO tradedSupplyDTO) {
-        tradedSupplyDTO.getSupplyEntity().setNumberOfBags(tradedSupplyDTO.getNumberOfBags()-tradedSupplyDTO.getSupplyEntity().getNumberOfBags()-(tradedSupplyDTO.isNewBagOpened()? 1: 0));
+    private void setSupplyBags(TradedSupplyDTO tradedSupplyDTO, int currentBags) {
+        tradedSupplyDTO.getSupplyEntity().setNumberOfBags(currentBags-tradedSupplyDTO.getNumberOfBags()-(tradedSupplyDTO.isNewBagOpened()? 1: 0));
     }
 
     @Override
@@ -57,14 +61,14 @@ public class TradedSupplyService implements ITradedSupplyService {
         if(!hasExtraBags)
             return  new ServiceResponse(new ErrorDialogue(this.retriever.getMessage().getTradedSupplyMessage().totalAmountIsNotValid()));
         if(quantity-currentQuantity >=25.0f){
-            new ErrorDialogue(this.retriever.getMessage().getTradedSupplyMessage().thisNeedsOpeningMoreThanOneBag());
+            return new ServiceResponse(new ErrorDialogue(this.retriever.getMessage().getTradedSupplyMessage().thisNeedsOpeningMoreThanOneBag()));
         }
         DecisionCommand command = new AddBagCommand(element,quantity);
         return new ServiceResponse(
                 new DecisionDialogue(
                         command,
                         this.retriever.getMessage().getTradedSupplyMessage().thereIsNoSufficientQuantityDoYouWantToOpenNewBag(),
-                        this.retriever.getMessage().getTradedSupplyMessage().newBagWsdOpened()
+                        this.retriever.getMessage().getTradedSupplyMessage().newBagWasOpened()
                 )
         );
     }

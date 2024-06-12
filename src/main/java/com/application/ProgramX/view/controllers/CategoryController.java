@@ -46,10 +46,6 @@ public class CategoryController extends Controller implements Observer {
 
 
 
-    public void closeWindow(){
-
-    }
-
     public void createCategory() {
         String categoryName= this.NewCategoryTextField.getText();
         if(categoryName.isEmpty() || categoryName.trim().isEmpty()){
@@ -101,7 +97,4 @@ public class CategoryController extends Controller implements Observer {
         }
     }
 
-    public void openSuppliesPage(ActionEvent actionEvent) throws IOException {
-        super.switchWindow(Controller.SUPPLIES_FXML,new SupplyController(this.servicePool, this.retriever),actionEvent);
-    }
 }

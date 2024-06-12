@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component;
 public class EnglishMessage extends Message {
 
     public EnglishMessage(){
-        super(new EnglishCategoryMessage(),new EnglishSupplyMessage());
+        super(new EnglishCategoryMessage(),new EnglishSupplyMessage(),new EnglishTradedSupplyMessage());
     }
 }

@@ -11,7 +11,7 @@ public interface TradedSupplyMessage {
 
     String thereIsNoSufficientQuantityDoYouWantToOpenNewBag();
 
-    String newBagWsdOpened();
+    String newBagWasOpened();
 
     String youHaveInsufficientNumberOfBags();
 }

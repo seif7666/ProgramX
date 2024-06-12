@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SupplyDTO {
+public class SupplyDTO implements Cloneable {
     private Long supplyID;
     private String supplyName;
     private SupplyCategoryDTO supplyCategory;
@@ -38,5 +38,17 @@ public class SupplyDTO {
     public void setPricePerKilo(Float pricePerKilo) {
         LessThanZeroException.throwIfLessThan0("PricePerKilo",pricePerKilo);
         this.pricePerKilo = pricePerKilo;
+    }
+
+
+    @Override
+    public SupplyDTO clone() {
+        try {
+            SupplyDTO clone = (SupplyDTO) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

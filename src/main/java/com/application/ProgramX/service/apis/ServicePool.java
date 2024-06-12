@@ -13,4 +13,6 @@ public class ServicePool {
     private ICategoryService categoryService;
     @Autowired
     private ISupplyService supplyService;
+    @Autowired
+    private  ITradedSupplyService tradedSupplyService;
 }

@@ -2,6 +2,7 @@ package com.application.ProgramX.view.controllers;
 
 import com.application.ProgramX.service.apis.ServicePool;
 import com.application.ProgramX.service.message.MessageRetriever;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -10,14 +11,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.InputEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import lombok.extern.java.Log;
 
 import java.io.IOException;
 import java.util.Objects;
-
+@Log
 public abstract class Controller {
     public static final String CATEGORIES_FXML="/FXMLs/Categories.fxml";
     public static final String SUPPLIES_FXML="/FXMLs/Supplies.fxml";
     public static final String SUPPLY_DETAILS_FXML= "/FXMLs/SupplyDetails.fxml";
+    private static final String TRADE_FXML = "/FXMLs/Trade.fxml";
     protected final MessageRetriever retriever;
     protected final ServicePool servicePool;
 
@@ -43,18 +46,18 @@ public abstract class Controller {
         }
     }
 
-    protected void addIntegerValidations(TextField field){
+    public static void addIntegerValidations(TextField field){
         field.textProperty().addListener((observable, oldValue, newValue) -> {
             adjustValidInteger(field,oldValue,newValue);
         });
     }
-    protected void addDoubleValidations(TextField field){
+    public static void addDoubleValidations(TextField field){
         field.textProperty().addListener((observable, oldValue, newValue) -> {
             adjustValidDouble(field,oldValue,newValue);
         });
     }
 
-    private void adjustValidDouble(TextField observable, String oldValue, String newValue){
+    public static void adjustValidDouble(TextField observable, String oldValue, String newValue){
         try{
             if(newValue.isEmpty())
                 return;
@@ -64,7 +67,7 @@ public abstract class Controller {
         }
     }
 
-    private void adjustValidInteger(TextField observable, String oldValue, String newValue){
+    public static void adjustValidInteger(TextField observable, String oldValue, String newValue){
         try{
             if(newValue.isEmpty())
                 return;
@@ -73,4 +76,18 @@ public abstract class Controller {
             observable.setText(oldValue);
         }
     }
+
+    public void closeWindow(ActionEvent actionEvent){
+
+    }
+    public void openCategoriesWindow(ActionEvent action){
+        switchWindow(CATEGORIES_FXML,new CategoryController(this.retriever, this.servicePool),action);
+    }
+    public void openSuppliesWindow(ActionEvent action){
+        switchWindow(Controller.SUPPLIES_FXML,new SupplyController(this.servicePool, this.retriever),action);
+    }
+    public void openTradeWindowWindow(ActionEvent action){
+        switchWindow(Controller.TRADE_FXML,new TradeController(this.servicePool, this.retriever),action);
+    }
+
 }

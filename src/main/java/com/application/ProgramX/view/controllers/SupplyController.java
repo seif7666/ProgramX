@@ -133,8 +133,6 @@ public class SupplyController extends Controller {
     }
 
 
-    public void closeWindow(ActionEvent actionEvent) {
-    }
 
     public void createSupply(ActionEvent actionEvent) {
         try {
@@ -165,9 +163,6 @@ public class SupplyController extends Controller {
             throw new RuntimeException(this.retriever.getMessage().getSupplyMessage().noCategoryWasSelected()) ;
     }
 
-    public void openCategoriesWindow(ActionEvent actionEvent) throws IOException {
-        switchWindow(CATEGORIES_FXML,new CategoryController(this.retriever, this.servicePool),actionEvent);
-    }
 
     public void filterByCategory(ActionEvent actionEvent) {
         SupplyCategoryDTO dto= this.SearchByCategoryCombo.getValue();
