@@ -3,20 +3,18 @@ package com.application.ProgramX.view.controllers;
 import com.application.ProgramX.service.apis.ServicePool;
 import com.application.ProgramX.service.dtos.trading.TradedSupplyDTO;
 import com.application.ProgramX.service.message.MessageRetriever;
-import com.application.ProgramX.service.responses.dialogs.ErrorDialogue;
 import com.application.ProgramX.view.components.TradedSupplyListCell;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import lombok.extern.java.Log;
+
+import java.util.List;
 
 
 @Log
@@ -44,7 +42,7 @@ public class TradeController extends Controller {
     }
 
     private void setListStyle() {
-        this.ListView.setCellFactory(c -> new TradedSupplyListCell<TradedSupplyDTO>(this.servicePool,this.retriever));
+        this.ListView.setCellFactory(c -> new TradedSupplyListCell<TradedSupplyDTO>(this.servicePool,this.retriever, this));
     }
 
     protected TradeController(ServicePool servicePool, MessageRetriever retriever) {
@@ -59,7 +57,9 @@ public class TradeController extends Controller {
             return;
         }*/
         ListView.getItems().add(new TradedSupplyDTO());
+    }
 
-
+    public List<TradedSupplyDTO> getTradedSupplies(){
+        return this.ListView.getItems().stream().toList();
     }
 }

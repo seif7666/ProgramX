@@ -14,4 +14,6 @@ public interface TradedSupplyMessage {
     String newBagWasOpened();
 
     String youHaveInsufficientNumberOfBags();
+
+    String supplyAlreadyChosenBefore();
 }

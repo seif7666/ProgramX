@@ -6,7 +6,9 @@ import com.application.ProgramX.service.dtos.SupplyDTO;
 import com.application.ProgramX.service.dtos.trading.TradedSupplyDTO;
 import com.application.ProgramX.service.message.MessageRetriever;
 import com.application.ProgramX.service.responses.ServiceResponse;
+import com.application.ProgramX.service.responses.dialogs.ErrorDialogue;
 import com.application.ProgramX.view.controllers.Controller;
+import com.application.ProgramX.view.controllers.TradeController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.NodeOrientation;
@@ -25,11 +27,14 @@ public class TradedSupplyListCell<T> extends ListCell<TradedSupplyDTO> {
     private  SupplyDTO supplyDTO;
     private final ServicePool servicePool;
     private final MessageRetriever retriever;
+    private final TradeController controller;
 
-    public TradedSupplyListCell(ServicePool servicePool, MessageRetriever retriever) {
+    public TradedSupplyListCell(ServicePool servicePool, MessageRetriever retriever, TradeController controller) {
         super();
         this.servicePool = servicePool;
         this.retriever = retriever;
+        this.controller= controller;
+
     }
 
     @Override
@@ -118,10 +123,11 @@ public class TradedSupplyListCell<T> extends ListCell<TradedSupplyDTO> {
     private void setEventHandlerForSupply(ComboBox<SupplyDTO> supplyDTOComboBox, Label pricePerBagLabel, Label pricePerKiloLabel) {
         Callback<SupplyDTO,?> callback= (Callback<SupplyDTO, Object>) supply -> {
             tradedSupply.setSupplyEntity(supply.clone());
+
             supplyDTO= supply;
             return null;
         };
-        supplyDTOComboBox.setOnAction(new LabelSetter(supplyDTOComboBox,pricePerBagLabel,pricePerKiloLabel,callback));
+        supplyDTOComboBox.setOnAction(new LabelSetter(supplyDTOComboBox,pricePerBagLabel,pricePerKiloLabel,callback,this));
     }
 
     private void setEventHandlerForComboBoxes(ComboBox<SupplyCategoryDTO> categoryDTOComboBox, ComboBox<SupplyDTO> supplyDTOComboBox) {
@@ -158,6 +164,16 @@ public class TradedSupplyListCell<T> extends ListCell<TradedSupplyDTO> {
         field.setText(total+"");
     }
 
+    private boolean supplyAlreadyThere(SupplyDTO dto) {
+        log.info("Callled");
+        for(TradedSupplyDTO i : this.controller.getTradedSupplies()) {
+            System.out.println(i);
+            if (i.getSupplyEntity() != null && i.getSupplyEntity().equals(dto))
+                return true;
+        }
+        return false;
+    }
+
     private record SupplySetter  (ServicePool servicePool,ComboBox<SupplyCategoryDTO> categoryDTOComboBox, ComboBox<SupplyDTO> supplyDTOComboBox) implements EventHandler<ActionEvent>{
 
         @Override
@@ -171,14 +187,23 @@ public class TradedSupplyListCell<T> extends ListCell<TradedSupplyDTO> {
         }
     }
     private record LabelSetter(ComboBox<SupplyDTO> supplyDTOComboBox, Label pricePerBagLabel,
-                               Label pricePerKiloLabel, Callback<SupplyDTO,?> callback) implements EventHandler<ActionEvent> {
+                               Label pricePerKiloLabel, Callback<SupplyDTO,?> callback, TradedSupplyListCell<?> controller) implements EventHandler<ActionEvent> {
 
         @Override
         public void handle(ActionEvent actionEvent) {
             SupplyDTO dto= supplyDTOComboBox.getValue();
+            if(dto==null)
+                return;
+            if(controller.supplyAlreadyThere(dto)){
+                new ErrorDialogue(controller.retriever.getMessage().getTradedSupplyMessage().supplyAlreadyChosenBefore()).executeDialogue();
+                supplyDTOComboBox().getSelectionModel().clearSelection();
+                return;
+            }
             callback.call(dto);
             pricePerBagLabel.setText(dto.getPricePerBag()+"$");
             pricePerKiloLabel.setText(dto.getPricePerKilo()+"$");
         }
+
+
     }
 }

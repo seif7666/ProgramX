@@ -32,4 +32,9 @@ public class EnglishTradedSupplyMessage implements TradedSupplyMessage {
     public String youHaveInsufficientNumberOfBags() {
         return "You have insufficient number of bags!";
     }
+
+    @Override
+    public String supplyAlreadyChosenBefore() {
+        return "You have already selected this supply.";
+    }
 }
