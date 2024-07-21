@@ -16,4 +16,8 @@ public interface TradedSupplyMessage {
     String youHaveInsufficientNumberOfBags();
 
     String supplyAlreadyChosenBefore();
+
+    String completePayment();
+
+    String paymentCompleted();
 }

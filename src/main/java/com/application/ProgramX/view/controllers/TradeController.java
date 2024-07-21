@@ -4,6 +4,7 @@ import com.application.ProgramX.service.apis.ServicePool;
 import com.application.ProgramX.service.dtos.trading.TradedSupplyDTO;
 import com.application.ProgramX.service.message.MessageRetriever;
 import com.application.ProgramX.view.components.TradedSupplyListCell;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -24,6 +25,9 @@ public class TradeController extends Controller {
     public ListView<TradedSupplyDTO> ListView;
     @FXML
     public HBox LabelsHBox;
+
+
+
 
     public void initialize(){
         setListStyle();
@@ -61,5 +65,9 @@ public class TradeController extends Controller {
 
     public List<TradedSupplyDTO> getTradedSupplies(){
         return this.ListView.getItems().stream().toList();
+    }
+
+    public void handeDeal(ActionEvent actionEvent) {
+        this.servicePool.getTradeService().trade(this.getTradedSupplies()).runDialogue();
     }
 }

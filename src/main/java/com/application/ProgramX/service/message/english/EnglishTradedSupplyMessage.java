@@ -37,4 +37,14 @@ public class EnglishTradedSupplyMessage implements TradedSupplyMessage {
     public String supplyAlreadyChosenBefore() {
         return "You have already selected this supply.";
     }
+
+    @Override
+    public String completePayment() {
+        return "Complete Payment?";
+    }
+
+    @Override
+    public String paymentCompleted() {
+        return "Payment completed successfully!";
+    }
 }

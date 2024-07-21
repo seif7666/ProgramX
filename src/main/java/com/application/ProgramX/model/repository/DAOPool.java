@@ -16,5 +16,4 @@ public class DAOPool {
     private TradeOperationRepository tradeOperationRepository;
     @Autowired
     private TradedSupplyRepository tradedSupplyRepository;
-
 }
